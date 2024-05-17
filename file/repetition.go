@@ -67,18 +67,23 @@ func (f *File) NewFileWithNoDuplicates() {
 		}
 	}
 
-	newFile := strings.Join(newFileContent, "\n")
-	fmt.Println(newFile)
-	homeDir, err := os.UserHomeDir()
-	if err != nil {
-		panic(err)
-	}
-	newFileName := "new-" + f.fileName
-	fullPath := filepath.Join(homeDir, "Documents", newFileName)
-	err = os.WriteFile(fullPath, []byte(newFile), 0644) // 0644: rw-r--r--
+	newContent := strings.Join(newFileContent, "\n")
+
+	// 0644: rw-r--r--
+	err := os.WriteFile(getFullFilePath(f.fileName), []byte(newContent), 0644)
 	if err != nil {
 		log.Println("couldn't create a file. ", err)
 		return
 	}
 	fmt.Println("File Created Successfully.")
+}
+
+func getFullFilePath(filename string) string {
+	homeDir, err := os.UserHomeDir()
+	if err != nil {
+		panic(err)
+	}
+	newFileName := "new-" + filename
+	fullPath := filepath.Join(homeDir, "Documents", newFileName)
+	return fullPath
 }
