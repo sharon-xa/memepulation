@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/sharon-xa/text-manipulation/file"
+	"github.com/sharon-xa/memepulation/file"
 )
 
 var pl = fmt.Println
