@@ -29,10 +29,10 @@ func main() {
 	usage()
 	filename := readArgument()
 	file := file.ReadFile(filename)
+	input := bufio.NewScanner(os.Stdout)
 
 infinitLoop:
 	for {
-		input := bufio.NewScanner(os.Stdout)
 		fmt.Print("\nEnter operation: ")
 		input.Scan()
 
