@@ -8,9 +8,10 @@ import (
 )
 
 type File struct {
-	fileName    string
-	fileContent []byte
-	LinesArr    []string
+	FileName       string
+	FileContent    []byte
+	LinesArr       []string
+	LinesArrLength int
 }
 
 func ReadFile(path string) *File {
@@ -20,22 +21,26 @@ func ReadFile(path string) *File {
 	}
 
 	arrOfLines := strings.Split(string(fileContent), "\n")
-	if arrOfLines[len(arrOfLines)-1] == "" || arrOfLines[len(arrOfLines)-1] == " " {
+	lastArrIndex := arrOfLines[len(arrOfLines)-1]
+
+	if lastArrIndex == "" || lastArrIndex == " " {
 		arrOfLines = arrOfLines[:len(arrOfLines)-1]
 	}
+
 	pathArr := strings.Split(path, "/")
 	fileName := pathArr[len(pathArr)-1]
 	return &File{
-		fileName:    fileName,
-		fileContent: fileContent,
-		LinesArr:    arrOfLines,
+		FileName:       fileName,
+		FileContent:    fileContent,
+		LinesArr:       arrOfLines,
+		LinesArrLength: len(arrOfLines),
 	}
 }
 
 func (f *File) GetFileContent() string {
-	return string(f.fileContent)
+	return string(f.FileContent)
 }
 
 func (f *File) PrintFileContent() {
-	fmt.Print(string(f.fileContent))
+	fmt.Print(string(f.FileContent))
 }
