@@ -15,10 +15,12 @@ type File struct {
 }
 
 func ReadFile(path string) *File {
-	fileContent, err := os.ReadFile(path)
+	file, err := os.ReadFile(path)
 	if err != nil {
 		log.Fatal("can't read file: ", path, "\n", err)
 	}
+
+	fileContent := strings.ToLower(string(file))
 
 	arrOfLines := strings.Split(string(fileContent), "\n")
 	lastArrIndex := arrOfLines[len(arrOfLines)-1]
@@ -31,7 +33,7 @@ func ReadFile(path string) *File {
 	fileName := pathArr[len(pathArr)-1]
 	return &File{
 		FileName:       fileName,
-		FileContent:    fileContent,
+		FileContent:    []byte(fileContent),
 		LinesArr:       arrOfLines,
 		LinesArrLength: len(arrOfLines),
 	}
