@@ -12,12 +12,20 @@ type action func(index int)
 
 // this function find duplicates, and with every duplicate we call the action function
 func (f *File) findDuplicates(fn action) {
-	for i := 0; i < len(f.LinesArr); i++ {
-		for j := i + 1; j < len(f.LinesArr); j++ {
-			if f.LinesArr[i] == f.LinesArr[j] {
-				fn(i)
-				break
-			}
+	linesFrequency := make(map[string]int)
+
+	for i, line := range f.LinesArr {
+		line = strings.TrimSpace(line) // Trim spaces around the line
+		if line == "" {
+			continue // Skip empty lines
+		}
+		if linesFrequency[line] == 0 {
+			// First occurrence of the line
+			linesFrequency[line] = 1
+		} else if linesFrequency[line] > 0 {
+			// Duplicate found
+			linesFrequency[line] += 1
+			fn(i)
 		}
 	}
 }
@@ -72,17 +80,20 @@ func (f *File) NewFileWithNoDuplicates() {
 
 	var newFileContent []string
 
+	linesFrequency := make(map[string]int)
+
 	for _, line := range f.LinesArr {
-		// Check if the name exist in the new array
-		exist := false
-		for _, str := range newFileContent {
-			if line == str {
-				exist = true
-			}
+		line = strings.TrimSpace(line)
+		if line == "" {
+			continue
 		}
-		if !exist {
-			newFileContent = append(newFileContent, line)
+		if linesFrequency[line] == 0 {
+			linesFrequency[line] = 1
 		}
+	}
+
+	for k := range linesFrequency {
+		newFileContent = append(newFileContent, k)
 	}
 
 	newContent := strings.Join(newFileContent, "\n")
