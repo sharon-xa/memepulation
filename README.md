@@ -15,7 +15,7 @@
 Run the following command in your terminal to install Memepulation:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/sharon-xa/memepulation/main/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/sharon-xa/memepulation/main/install.sh | sudo bash
 ```
 
 ## Usage
