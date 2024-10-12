@@ -108,6 +108,34 @@ func (f *File) NewFileWithNoDuplicates() {
 	fmt.Printf("📁 File path: %s\n\n", fullPath)
 }
 
+func (f *File) ShowFileStats() {
+	totalLines := len(f.LinesArr)
+	emptyLines := 0
+	uniqueLines := 0
+	duplicateLines := 0
+	linesFrequency := make(map[string]int)
+
+	for _, line := range f.LinesArr {
+		line = strings.TrimSpace(line)
+		if line == "" {
+			emptyLines++
+			continue
+		}
+		if linesFrequency[line] == 0 {
+			linesFrequency[line] = 1
+			uniqueLines++
+		} else {
+			duplicateLines++
+		}
+	}
+
+	fmt.Printf("\n📊 File statistics:\n")
+	fmt.Printf("- Total lines: %d\n", totalLines)
+	fmt.Printf("- Empty lines: %d\n", emptyLines)
+	fmt.Printf("- Unique lines: %d\n", uniqueLines)
+	fmt.Printf("- Duplicate lines: %d\n\n", duplicateLines)
+}
+
 func getFullFilePath(filename string) string {
 	homeDir, err := os.UserHomeDir()
 	if err != nil {

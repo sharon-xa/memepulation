@@ -17,9 +17,10 @@ func usage() {
 	pl("Flags:")
 	flag.PrintDefaults() // Automatically prints the flags you've defined
 	pl("\nExamples:")
-	pl("    text-manipulation -s file.txt  # Show file content")
-	pl("    text-manipulation -sr file.txt # Show repeated lines")
-	pl("    text-manipulation -n file.txt  # Create a new file without duplicates")
+	pl("    text-manipulation -s file.txt       # Show file content")
+	pl("    text-manipulation -sr file.txt      # Show repeated lines")
+	pl("    text-manipulation -n file.txt       # Create a new file without duplicates")
+	pl("    text-manipulation -stats file.txt   # Show statistics about the file content")
 	pl("")
 }
 
@@ -28,6 +29,7 @@ func main() {
 	numRepeated := flag.Bool("r", false, "Show number of repeated lines")
 	showRepeated := flag.Bool("sr", false, "Show repeated lines")
 	createNew := flag.Bool("n", false, "Create a new file with no duplicates")
+	stats := flag.Bool("stats", false, "Show file content statistics")
 	help := flag.Bool("h", false, "Display help")
 
 	flag.Usage = usage
@@ -57,6 +59,9 @@ func main() {
 
 	case *createNew:
 		file.NewFileWithNoDuplicates()
+
+	case *stats:
+		file.ShowFileStats()
 
 	default:
 		pl("Unknown operation! Use -h to see available options.")
