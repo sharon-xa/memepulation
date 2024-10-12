@@ -1,9 +1,9 @@
 package main
 
 import (
-	"bufio"
+	"flag"
 	"fmt"
-	"os"
+	"log"
 
 	"github.com/sharon-xa/memepulation/file"
 )
@@ -11,54 +11,54 @@ import (
 var pl = fmt.Println
 
 func usage() {
-	pl("")
-	pl("This program helps you preform some operations on text files.")
+	pl("\nThis program helps you perform operations on text files.")
 	pl("Usage:")
-	pl("    text-manipulation [file]")
+	pl("    text-manipulation [flags] [file]\n")
+	pl("Flags:")
+	flag.PrintDefaults() // Automatically prints the flags you've defined
+	pl("\nExamples:")
+	pl("    text-manipulation -s file.txt  # Show file content")
+	pl("    text-manipulation -sr file.txt # Show repeated lines")
+	pl("    text-manipulation -n file.txt  # Create a new file without duplicates")
 	pl("")
-	pl("Available Operations:")
-	pl("    s   show file content.")
-	pl("    r   show number of repeated lines.")
-	pl("    sr  show repeated lines.")
-	pl("    n  	create new file with no duplicates.")
-	pl("    h   see help.")
-	pl("    q   exit out of the program.")
 }
 
 func main() {
-	usage()
-	filename := readArgument()
-	file := file.ReadFile(filename)
-	input := bufio.NewScanner(os.Stdout)
+	showContent := flag.Bool("s", false, "Show file content")
+	numRepeated := flag.Bool("r", false, "Show number of repeated lines")
+	showRepeated := flag.Bool("sr", false, "Show repeated lines")
+	createNew := flag.Bool("n", false, "Create a new file with no duplicates")
+	help := flag.Bool("h", false, "Display help")
 
-infinitLoop:
-	for {
-		fmt.Print("\nEnter operation: ")
-		input.Scan()
+	flag.Usage = usage
+	flag.Parse()
 
-		switch input.Text() {
-		case "s":
-			file.PrintFileContent()
-
-		case "r":
-			file.NumOfRepeatedLines()
-
-		case "sr":
-			file.ShowRepeatedLines()
-
-		case "n":
-			file.NewFileWithNoDuplicates()
-
-		case "h":
-			usage()
-
-		case "q":
-			pl("exiting...")
-			break infinitLoop
-
-		default:
-			pl("Unknown operation! try again.")
-		}
+	if *help || len(flag.Args()) == 0 {
+		usage()
+		return
 	}
-	pl("GoodBye")
+
+	filename := flag.Arg(0)
+	file := file.ReadFile(filename)
+	if file == nil {
+		log.Fatalln("Failed to read the file.")
+		return
+	}
+
+	switch {
+	case *showContent:
+		file.PrintFileContent()
+
+	case *numRepeated:
+		file.NumOfRepeatedLines()
+
+	case *showRepeated:
+		file.ShowRepeatedLines()
+
+	case *createNew:
+		file.NewFileWithNoDuplicates()
+
+	default:
+		pl("Unknown operation! Use -h to see available options.")
+	}
 }

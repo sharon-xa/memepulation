@@ -37,14 +37,16 @@ func (f *File) NumOfRepeatedLines() int {
 		numberOfRepeatedLines++
 	})
 
+	fmt.Println("\n-------------------------")
 	switch numberOfRepeatedLines {
 	case 0:
-		fmt.Println("No repeated lines in the file.")
+		fmt.Println("✅ No repeated lines found in the file.")
 	case 1:
-		fmt.Println("There's only one repeated line in the file.")
+		fmt.Println("⚠️  There is 1 repeated line in the file.")
 	default:
-		fmt.Printf("There's %d repeated lines in this file.\n", numberOfRepeatedLines)
+		fmt.Printf("⚠️  There are %d repeated lines in the file.\n", numberOfRepeatedLines)
 	}
+	fmt.Print("-------------------------\n\n")
 
 	return numberOfRepeatedLines
 }
@@ -57,29 +59,27 @@ func (f *File) ShowRepeatedLines() {
 		lineDuplicates[f.LinesArr[index]]++
 	})
 
-	fmt.Println("")
+	fmt.Println("\n-------------------------")
 	if len(lineDuplicates) == 0 {
-		fmt.Println("There are no duplicates")
+		fmt.Println("✅ No duplicate lines found.")
+		fmt.Print("-------------------------\n\n")
 		return
 	}
 
-	fmt.Println("")
-	fmt.Println("If there's 2 names in a file the count will be 1 if 3 the count will be 2.")
+	fmt.Print("🔁 Repeated lines and their counts:\n\n")
 	for line, count := range lineDuplicates {
-		fmt.Printf("%s: %d\n", line, count)
+		fmt.Printf("- \"%s\": repeated %d time(s)\n", line, count)
 	}
-
-	fmt.Println("")
+	fmt.Print("-------------------------\n\n")
 }
 
 func (f *File) NewFileWithNoDuplicates() {
 	if f.NumOfRepeatedLines() == 0 {
-		fmt.Println("There are no duplicates in this file.")
+		fmt.Print("✅ No duplicates found. No new file created.\n\n")
 		return
 	}
 
 	var newFileContent []string
-
 	linesFrequency := make(map[string]int)
 
 	for _, line := range f.LinesArr {
@@ -97,16 +97,15 @@ func (f *File) NewFileWithNoDuplicates() {
 	}
 
 	newContent := strings.Join(newFileContent, "\n")
-
-	// 0644: rw-r--r--
 	fullPath := getFullFilePath(f.FileName)
 	err := os.WriteFile(fullPath, []byte(newContent), 0644)
 	if err != nil {
-		log.Println("couldn't create a file.", err)
+		log.Println("❌ Failed to create the new file:", err)
 		return
 	}
-	fmt.Println("File Created Successfully.")
-	fmt.Println("File path is:", fullPath)
+
+	fmt.Println("✅ New file created successfully.")
+	fmt.Printf("📁 File path: %s\n\n", fullPath)
 }
 
 func getFullFilePath(filename string) string {
