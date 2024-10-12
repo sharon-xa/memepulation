@@ -2,10 +2,8 @@ name: Build and Release
 
 on:
   push:
-    branches:
-      - main
     tags:
-      - 'v*' # Triggers on tags starting with 'v'
+      - 'v*'
 
 jobs:
   build:
@@ -35,8 +33,7 @@ jobs:
         id: create_release
         uses: softprops/action-gh-release@v1
         with:
-          tag_name: ${{ github.ref }} # Use the Git tag as the release version
+          tag_name: ${{ github.ref }} 
           files: builds/*
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
