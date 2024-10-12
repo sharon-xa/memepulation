@@ -24,16 +24,24 @@ jobs:
           for os in linux darwin; do
             for arch in amd64 arm64; do
               output_name="builds/memepulation-${os}-${arch}"
-              version=${GITHUB_REF#refs/tags/} # Get the version from the tag
+              version=${GITHUB_REF#refs/tags/} 
               GOOS=$os GOARCH=$arch go build -o $output_name -ldflags "-X main.version=${version}"
             done
           done
 
       - name: Create Release
         id: create_release
+        run: |
+          TAG_NAME="${GITHUB_REF#refs/tags/}"
+          echo "TAG_NAME=${TAG_NAME}" >> $GITHUB_ENV
+        # Ensure this step is run before the following uses step
+     
+      - name: Publish Release
         uses: softprops/action-gh-release@v1
         with:
-          tag_name: ${{ github.ref }} 
+          tag_name: ${{ github.ref }}  # This remains the full reference (e.g., refs/tags/v1.0.2)
+          release_name: ${{ env.TAG_NAME }}  # Use the clean tag name here
           files: builds/*
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Use your token here
+
