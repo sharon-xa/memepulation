@@ -15,7 +15,7 @@ else
   exit 1
 fi
 
-DOWNLOAD_URL="https://github.com/your-repo/memepulation/releases/download/$VERSION/$BINARY_NAME-$OS-$ARCH"
+DOWNLOAD_URL="https://github.com/sharon-xa/memepulation/releases/download/$VERSION/$BINARY_NAME-$OS-$ARCH"
 
 echo "Downloading $BINARY_NAME for $OS/$ARCH from $DOWNLOAD_URL..."
 curl -L -o /usr/local/bin/$BINARY_NAME "$DOWNLOAD_URL"
