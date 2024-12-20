@@ -1,6 +1,6 @@
 #!/bin/bash
 
-VERSION="v1.0.3"
+VERSION="v1.9.0"
 BINARY_NAME="memepulation"
 
 OS="$(uname | tr '[:upper:]' '[:lower:]')"
