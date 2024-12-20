@@ -1,21 +1,30 @@
 package file
 
 import (
-	"fmt"
 	"log"
 	"os"
 	"strings"
 )
 
 type File struct {
-	FileName       string
-	FileContent    []byte
-	LinesArr       []string
-	LinesArrLength int
+	FileName    string
+	fileSize    int64
+	fileContent []byte
+	linesArr    []string
+
+	duplicates    int
+	unique        int
+	empty         int
+	lineFrequency map[string]int
 }
 
 func ReadFile(path string) *File {
 	file, err := os.ReadFile(path)
+	if err != nil {
+		log.Fatal("can't read file: ", path, "\n", err)
+	}
+
+	fileInfo, err := os.Stat(path)
 	if err != nil {
 		log.Fatal("can't read file: ", path, "\n", err)
 	}
@@ -31,18 +40,41 @@ func ReadFile(path string) *File {
 
 	pathArr := strings.Split(path, "/")
 	fileName := pathArr[len(pathArr)-1]
-	return &File{
-		FileName:       fileName,
-		FileContent:    []byte(fileContent),
-		LinesArr:       arrOfLines,
-		LinesArrLength: len(arrOfLines),
+	f := &File{
+		FileName:    fileName,
+		fileSize:    fileInfo.Size(),
+		fileContent: []byte(fileContent),
+		linesArr:    arrOfLines,
 	}
+
+	dup, uni, mt, lineFreq := f.analyzeLines()
+	f.duplicates = dup
+	f.unique = uni
+	f.empty = mt
+	f.lineFrequency = lineFreq
+
+	return f
 }
 
-func (f *File) GetFileContent() string {
-	return string(f.FileContent)
-}
+// analyzeLines analyzes the file lines and returns the count of duplicate, unique, and empty lines,
+// along with the indexes of repeated lines.
+func (f *File) analyzeLines() (duplicates int, unique int, empty int, lineFrequency map[string]int) {
+	lineFrequency = make(map[string]int)
 
-func (f *File) PrintFileContent() {
-	fmt.Print(string(f.FileContent))
+	for _, line := range f.linesArr {
+		line = strings.TrimSpace(line)
+		if line == "" {
+			empty++
+			continue
+		}
+		if lineFrequency[line] == 0 { // First occurrence of the line
+			lineFrequency[line] = 1
+			unique++
+		} else if lineFrequency[line] > 0 { // Duplicate found
+			lineFrequency[line] += 1
+			duplicates++
+		}
+	}
+
+	return duplicates, unique, empty, lineFrequency
 }
