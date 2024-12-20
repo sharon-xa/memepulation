@@ -1,14 +1,13 @@
 # Memepulation
 
-**Memepulation** is a Command-Line Interface (CLI) tool for performing various text file manipulations such as detecting duplicates, removing duplicates, and more.
+**Memepulation** is a Command-Line Interface (CLI) tool for performing various text file manipulations such as viewing file content, detecting repeated lines, displaying statistics, and more.
 
 ## Features
 
-- View the content of a file.
-- Count and display repeated lines.
-- Create a new file with no duplicates.
-- View file statistics such as total lines, empty lines, unique lines, and duplicate lines.
-
+- Show the content of a file.
+- Display all repeated lines or the number of repeated lines.
+- Display various file statistics (total lines, unique lines, empty lines, duplicate lines, size, and bytes).
+- Autocompletion support for Bash, Zsh, Fish, and PowerShell.
 
 ## Installation via Script (Linux/macOS)
 
@@ -23,81 +22,128 @@ curl -fsSL https://raw.githubusercontent.com/sharon-xa/memepulation/main/install
 ### Command Line Usage
 
 ```bash
-memepulation [flags] [file]
+memepulation [flags] <command>
 ```
 
-### Flags
+### Global Flags
 
-| Flag        | Description                                           |
-|-------------|-------------------------------------------------------|
-| `-s`        | Show file content.                                    |
-| `-r`        | Show the number of repeated lines in the file.        |
-| `-sr`       | Show all repeated lines in the file.                  |
-| `-n`        | Create a new file without duplicates.                 |
-| `-h`        | Show the help message with available operations.      |
-| `-stats`    | Display file statistics (total, unique, empty, and duplicate lines). |
-| `-q`        | Exit the program.                                     |
+| Flag         | Description                     |
+| ------------ | ------------------------------- |
+| `-f, --file` | Specify the file to manipulate. |
 
-### Examples
+### Commands and Their Flags
 
-To view the file content:
+#### `show`
+Display the file content or repeated lines.
+
+**Flags:**
+| Flag                    | Description                          |
+| ----------------------- | ------------------------------------ |
+| `-c, --content`         | Show file content.                   |
+| `-r, --repeated`        | Show all repeated lines in the file. |
+| `-n, --repeated-number` | Show the number of repeated lines.   |
+
+**Example:**
 ```bash
-memepulation -s example.txt
+memepulation -f text-files/names.txt show --content
+memepulation -f text-files/names.txt show --repeated
 ```
 
-To show the number of repeated lines:
+#### `stats`
+Display file statistics, including total, unique, empty, duplicate lines, size, and bytes.
+
+**Flags:**
+| Flag              | Description                           |
+| ----------------- | ------------------------------------- |
+| `-t, --total`     | Show the total number of lines.       |
+| `-u, --unique`    | Show the number of unique lines.      |
+| `-d, --duplicate` | Show the number of duplicate lines.   |
+| `-e, --empty`     | Show the number of empty lines.       |
+| `-s, --size`      | Show the size of the file.            |
+| `-b, --bytes`     | Show the number of bytes in the file. |
+| `-a, --all`       | Display all available statistics.     |
+
+**Example:**
 ```bash
-memepulation -r example.txt
+memepulation -f text-files/names.txt stats --all
 ```
 
-To create a new file without duplicates:
+#### `completion`
+Generate shell completion scripts for Bash, Zsh, Fish, or PowerShell.
+
+**Usage:**
 ```bash
-memepulation -n example.txt
+memepulation completion <shell>
 ```
 
-To show statistics about the file:
+**Example:**
 ```bash
-memepulation -stats example.txt
+memepulation completion bash > /etc/bash_completion.d/memepulation
 ```
 
-To see the help message:
+### Example Scenarios
+
+#### Show File Content
 ```bash
-memepulation -h
-```
-
-### Example File Manipulation
-
-If `example.txt` contains:
-```
-apple
-banana
-apple
-orange
-banana
-apple
-```
-
-Running:
-```bash
-memepulation -r example.txt
+memepulation -f example.txt show --content
 ```
 
 Output:
 ```
-⚠️  There are 3 repeated lines in the file.
+File content:
+line1
+line2
+line3
 ```
 
-Running:
+#### Display Repeated Lines
 ```bash
-memepulation -stats example.txt
+memepulation -f example.txt show --repeated
+```
+
+Output:
+```
+Repeated lines:
+line1
+line3
+```
+
+#### Display Statistics
+```bash
+memepulation -f example.txt stats --all
 ```
 
 Output:
 ```
 📊 File statistics:
 - Total lines: 6
-- Empty lines: 0
 - Unique lines: 3
-- Duplicate lines: 3
+- Duplicate lines: 2
+- Empty lines: 0
+- Size: 24 bytes
 ```
 
+## Autocompletion
+
+Memepulation supports shell autocompletion. To enable it, use the `completion` command as shown below:
+
+- **Bash:**
+  ```bash
+  memepulation completion bash > /etc/bash_completion.d/memepulation
+  ```
+- **Zsh:**
+  ```bash
+  memepulation completion zsh > "${fpath[1]}/_memepulation"
+  ```
+- **Fish:**
+  ```bash
+  memepulation completion fish > ~/.config/fish/completions/memepulation.fish
+  ```
+- **PowerShell:**
+  ```powershell
+  memepulation completion powershell > memepulation.ps1
+  ```
+
+## Contributing
+
+Feel free to submit issues or pull requests on the [GitHub repository](https://github.com/sharon-xa/memepulation).
