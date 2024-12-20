@@ -28,20 +28,24 @@ shell_name=$(basename "$SHELL")
 
 case "$shell_name" in
   bash)
-      source <(memepulation completion bash)
+    memepulation completion bash > /etc/bash_completion.d/memepulation
+    source /etc/bash_completion.d/memepulation
     ;;
   zsh)
-      source <(memepulation completion zsh)
+    fpath=(/usr/local/share/zsh/site-functions "$fpath")
+    memepulation completion zsh > "${fpath[1]}/_memepulation"
+    source "${fpath[1]}/_memepulation"
     ;;
   fish)
-      memepulation completion fish | source
+    memepulation completion fish > ~/.config/fish/completions/memepulation.fish
+    # shellcheck source=/dev/null
+    source ~/.config/fish/completions/memepulation.fish
     ;;
   *)
-    echo "Brother, what type of shell are you using?"
+    echo "Brother, what type of shell are you using? Unsupported shell: $shell_name"
     exit 1
     ;;
 esac
-
 
 if command -v $BINARY_NAME > /dev/null 2>&1; then
   echo "$BINARY_NAME installed successfully!"
