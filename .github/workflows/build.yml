@@ -34,7 +34,6 @@ jobs:
               run: |
                   TAG_NAME="${GITHUB_REF#refs/tags/}"
                   echo "::set-output name=TAG_NAME::${TAG_NAME}"
-              # Ensure this step is run before the following uses step
 
             - name: Publish Release
               uses: softprops/action-gh-release@v1
@@ -42,6 +41,7 @@ jobs:
                   tag_name: ${{ github.ref }} # This remains the full reference (e.g., refs/tags/v1.0.2)
                   release_name: ${{ steps.create_release.outputs.TAG_NAME }} # Use the clean tag name here
                   files: builds/*
+                  prerelease: true
               env:
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Use your token here
 
