@@ -29,6 +29,7 @@ func Execute() {
 
 func init() {
 	rootCmd.PersistentFlags().StringVarP(&filePath, "file", "f", "", "File to be manipulated")
+	rootCmd.MarkPersistentFlagRequired("file")
 
 	rootCmd.AddCommand(completionCmd)
 }
@@ -75,15 +76,15 @@ PS> memepulation completion powershell > memepulation.ps1
 			cmd.Help()
 			return
 		}
-		        switch args[0] {
-        case "bash":
-            rootCmd.GenBashCompletion(os.Stdout)
-        case "zsh":
-            rootCmd.GenZshCompletion(os.Stdout)
-        case "fish":
-            rootCmd.GenFishCompletion(os.Stdout, true)
-        case "powershell":
-            rootCmd.GenPowerShellCompletion(os.Stdout)
+		switch args[0] {
+		case "bash":
+			rootCmd.GenBashCompletion(os.Stdout)
+		case "zsh":
+			rootCmd.GenZshCompletion(os.Stdout)
+		case "fish":
+			rootCmd.GenFishCompletion(os.Stdout, true)
+		case "powershell":
+			rootCmd.GenPowerShellCompletion(os.Stdout)
 		default:
 			cmd.Help()
 		}
